@@ -45,7 +45,7 @@ public class Team extends BaseGameEntity implements ITeam
 	private static int currValidTeamID = 0;
 	private static int teamID;
 	private Color teamColor;
-	 
+	private static int currValidColor = 0;
 	
 	////A list of bots on the team, should be references, I'll ask
 	private	List<IRavenBot> teamBots = new ArrayList<IRavenBot>();
@@ -57,6 +57,9 @@ public class Team extends BaseGameEntity implements ITeam
 	
 	//Goal queue? 
 	//private GoalThink teamBrain;
+	
+
+	
 	
 	public Team(int id)
 	{
@@ -80,6 +83,22 @@ public class Team extends BaseGameEntity implements ITeam
 			/////we want this to register a team by ID but let's
 			/////just get the teams working
 			EntityManager.registerEntity(this);
+			
+			///Time to generate the team color. 
+			//trying to come up with an interesting way to do this
+			
+			//Current, inelegant solution is to find out if
+			//the last team color was zero (red) and if so, 
+			//the new one is blue.
+
+
+			 if (currValidColor == 0)
+			 {
+			 teamColor = new Color(250,0,0);
+			 currValidColor = 1;
+			 }
+			 else
+				 teamColor = new Color(0,250,0);
 		}
 
 	
@@ -132,9 +151,6 @@ public class Team extends BaseGameEntity implements ITeam
 	}
 	*/
 	public Color getTeamColor(){
-		//if (this.ID() == 101){
-		//teamColor = 
-		//}
 		return teamColor;
 	}
 }

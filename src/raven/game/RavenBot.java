@@ -313,7 +313,7 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 			GameCanvas.bluePen();
 		}
 		
-		GameCanvas.bluePen();
+		//GameCanvas.bluePen();
 		vecBotVBTrans = new ArrayList<Vector2D>(Transformations.WorldTransform(
 				vecBotVB, pos(), facing(), facing().perp(), scale()));
 		
