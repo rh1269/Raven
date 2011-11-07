@@ -471,7 +471,7 @@
       <ID>4</ID>
       <type>ROCKET_LAUNCHER</type>
       <position>
-        <x>150.0</x>
+        <x>100.0</x>
         <y>278.0</y>
       </position>
       <boundingRadius>0.0</boundingRadius>
