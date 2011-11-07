@@ -48,11 +48,21 @@ public class Blaster extends RavenWeapon {
 
 	@Override
 	public void render(){
-		List<Vector2D> tempBuffer = Transformations.WorldTransform(getWeaponVectorBuffer(),
+		List<Vector2D> tempBuffer;
+		if (getOwner().getTargetSys().isTargetShootable()) {
+		tempBuffer = Transformations.WorldTransform(getWeaponVectorBuffer(),
 				getOwner().pos(),
 				getOwner().facing(),
 				getOwner().facing().perp(),
 				getOwner().scale());
+		}
+		else {
+			tempBuffer = Transformations.WorldTransform(getWeaponVectorBuffer(),
+					getOwner().pos(),
+					getOwner().heading(),
+					getOwner().heading().perp(),
+					getOwner().scale());
+		}
 
 		setWeaponVectorTransBuffer(tempBuffer);
 
@@ -69,12 +79,8 @@ public class Blaster extends RavenWeapon {
 			
 			//time next available is 1second/times per second!
 			UpdateTimeWeaponIsNextAvailable();
-			
-			getOwner().getWorld().getMap().addSoundTrigger(getOwner(), RavenScript.getDouble("Blaster_SoundRange"));
-			
-			
+			getOwner().getWorld().getMap().addSoundTrigger(getOwner(), RavenScript.getDouble("Blaster_SoundRange"));	
 		}
-		System.out.println("time left: " + timeUntilAvailable);
 	}
 
 	@Override

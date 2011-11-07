@@ -94,6 +94,7 @@ public class GoalThink extends GoalComposite<RavenBot> {
 			if( desire >= best ) {
 				best = desire;
 				MostDesirable = eval;
+				Log.debug("GoalThink", "Evaluator " + MostDesirable.getGoalType() + " - " + desire);
 			}
 		}
 		Log.debug("GoalThink", "Evaluator " + MostDesirable.getGoalType() + " was found for bot " + m_pOwner.ID());
@@ -131,12 +132,18 @@ public class GoalThink extends GoalComposite<RavenBot> {
 			Log.debug("GoalThink", "Added new Goal_Explore to bot " + m_pOwner.ID());
 		}
 	}
-
+	public void addGoal_pursuit(RavenBot target) {
+		if (notPresent(GoalType.goal_pursuit)) {
+			removeAllSubgoals();
+			AddSubgoal( new Goal_Pursuit(m_pOwner, target));
+			Log.debug("GoalThink", "Added new Goal_Pursuit to bot " + m_pOwner.ID());
+		}
+	}
 	public void addGoal_getItem(RavenObject inp) {
 		if (notPresent(Goal.GoalType.goal_get)) {
 			removeAllSubgoals();
 			AddSubgoal( new Goal_GetItem(m_pOwner, inp));
-			Log.debug("GoalThink", "Added new Goal_GetITem to bot " + m_pOwner.ID());
+			Log.debug("GoalThink", "Added new Goal_GetItem to bot " + m_pOwner.ID());
 		}
 	}
 

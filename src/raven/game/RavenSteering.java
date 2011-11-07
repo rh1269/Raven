@@ -11,6 +11,7 @@ import raven.math.Vector2D;
 import raven.math.Wall2D;
 import raven.script.RavenScript;
 import raven.ui.GameCanvas;
+import raven.utils.DistanceHolder;
 
 //------------------------------------------------------------------------
 
@@ -102,9 +103,13 @@ public class RavenSteering {
 	/** Arrive makes use of these to determine how quickly a Raven_Bot should
 	 * decelerate to its target */
 	private enum Deceleration {
-		FAST,
-		NORMAL,
-		SLOW
+		FAST(0),
+		NORMAL(1),
+		SLOW(2);
+		
+		private int value;
+		private Deceleration(int i) {value = i;}
+		public int getValue() {return value;}
 	};
 	/** default */
 	private Deceleration deceleration;
@@ -198,7 +203,7 @@ public class RavenSteering {
 			//calculate the speed required to reach the target given the desired
 			//deceleration
 			//   double speed =  dist / (deceleration* decelerationTweaker);     
-			double speed= target.distance(ravenBot.pos())/ (Double.valueOf(deceleration.toString())*DecelerationTweaker);
+			double speed = target.distance(ravenBot.pos())/ (Double.valueOf(deceleration.getValue())*DecelerationTweaker);
 			//make sure the velocity does not exceed the max
 			speed = Math.min(speed, ravenBot.maxSpeed());
 
@@ -263,14 +268,14 @@ public class RavenSteering {
 		//the feelers are contained in a std::vector, m_Feelers
 		createFeelers();
 
-		Double DistToThisIP    = 0.0;
+		DistanceHolder DistToThisIP = new DistanceHolder();
+		DistToThisIP.dist = 0.0;
 		double DistToClosestIP = Double.MAX_VALUE;
 
 		//this will hold an index into the vector of walls
 		int ClosestWall = -1;
 
 		Vector2D SteeringForce = new Vector2D();
-		Vector2D point = new Vector2D();         //used for storing temporary info
 		Vector2D ClosestPoint=new Vector2D();  //holds the closest intersection point
 
 		//examine each feeler in turn
@@ -279,17 +284,18 @@ public class RavenSteering {
 			//run through each wall checking for any intersection points
 			for (int w=0; w<walls.size(); ++w)
 			{
-				if (Geometry.lineIntersection2D(ravenBot.pos(),
+				Vector2D point = Geometry.lineIntersection2D(ravenBot.pos(),
 						feelers.get(flr),
 						walls.get(w).from(),
 						walls.get(w).to(),
-						DistToThisIP,
-						point))
+						DistToThisIP);
+				
+				if(point != null)
 				{
 					//is this the closest found so far? If so keep a record
-							if (DistToThisIP < DistToClosestIP)
+							if (DistToThisIP.dist < DistToClosestIP)
 							{
-								DistToClosestIP = DistToThisIP;
+								DistToClosestIP = DistToThisIP.dist;
 
 								ClosestWall = w;
 
@@ -385,6 +391,14 @@ public class RavenSteering {
 
 		//these next three can be combined for flocking behavior (wander is
 		//also a good behavior to add into this mix)
+		if (On(BehaviorType.PURSUIT))
+		{
+			// need to sub the ravenBot below with the pursuit target
+			force = pursuit(targetAgent1).mul(weightPursuit);
+
+			if (!accumulateForce(steeringForce, force)) return steeringForce;
+		}
+		
 		if (On(BehaviorType.SEPARATION))
 		{
 			// HAve to tag bots that are in danger of being hit
@@ -413,12 +427,6 @@ public class RavenSteering {
 
 			if (!accumulateForce(steeringForce, force)) return steeringForce;
 		}
-		if (On(BehaviorType.PURSUIT))
-		{
-			force = pursuit(ravenBot).mul(weightPursuit);
-
-			if (!accumulateForce(steeringForce, force)) return steeringForce;
-		}
 
 		return steeringForce;
 	}
@@ -435,6 +443,7 @@ public class RavenSteering {
 		weightWallAvoidance			= RavenScript.getDouble("WallAvoidanceWeight");
 		viewDistance				= RavenScript.getDouble("ViewDistance");
 		wallDetectionFeelerLength	= RavenScript.getDouble("WallDetectionFeelerLength");
+		weightPursuit				= RavenScript.getDouble("PursuitWeight");
 		steeringForce				= new Vector2D();
 		feelers						= new Vector<Vector2D>(3);
 		deceleration				= Deceleration.NORMAL;
@@ -506,6 +515,7 @@ public class RavenSteering {
 	public boolean seekIsOn() { return On(BehaviorType.SEEK); }
 	public boolean arriveIsOn() { return On(BehaviorType.ARRIVE); }
 	public boolean wanderIsOn() { return On(BehaviorType.WANDER); }
+	public boolean pursuitIsOn() { return On(BehaviorType.PURSUIT); }
 	public boolean separationIsOn() { return On(BehaviorType.SEPARATION); }
 	public boolean wallAvoidanceIsOn() { return On(BehaviorType.WALL_AVOIDANCE); }
 
