@@ -8,16 +8,15 @@ import raven.game.interfaces.IRavenBot;
 import raven.game.interfaces.ITeam;
 import raven.utils.Log;
 
+
 public class EntityManager {
 	private static class EntityManagerHolder {
 		public static final EntityManager INSTANCE = new EntityManager();
 	}
 	
-	private static int availableID = 100;
-	static int lastTeamAssigned = 100;
+	private static int availableID = 0;
+	static int lastTeamAssigned = 0;
 
-	///No one is using available ID, so I'm going to use it to 
-	///track team ID's. -Brendan
 	
 	public static synchronized int getAvailableID() {
 		int toReturn = availableID;
@@ -30,22 +29,28 @@ public class EntityManager {
 	
 	private Map<Integer, BaseGameEntity> entityMap = new HashMap<Integer, BaseGameEntity>();
 	private Map<Integer, IRavenBot> botMap = new HashMap<Integer, IRavenBot>();
+	///Why teamList and listOfTeamID's? Because arraylists do not support
+	///primitive types, and I need something I can iterate through
+	///not a hashmap
 	private static Map<Integer, Team> teamList = new HashMap<Integer, Team>();
-	//private ArrayList<Team> teamList;
+	private static ArrayList<Team> listOfTeamIDs = new ArrayList<Team>();
 	
-	//////////////////ONLY ALLOWS FOR TWO TEAMS
+
 	public static Team getAvailableTeam() {
 		
-		//everyone joins the same team now.
-		int teamToAssign;
-		if (lastTeamAssigned == 101){
-			teamToAssign = 100;
-		}
-		else
-			teamToAssign = 101;
-		lastTeamAssigned = teamToAssign;
+		////this method is UNSAFE, it is assuming a team
+		///has been created!
 		
-		return teamList.get(teamToAssign);	
+		if(lastTeamAssigned < listOfTeamIDs.size()-1){
+			int temporary = lastTeamAssigned;
+			lastTeamAssigned++;
+			return listOfTeamIDs.get(temporary);
+		}
+		else{
+			int temporary = lastTeamAssigned;
+			lastTeamAssigned = 0;
+			return listOfTeamIDs.get(temporary);
+		}
 	}
 	
 	
@@ -63,11 +68,9 @@ public class EntityManager {
 	///Have to add the ability to register a team. 
 	
 	public static void registerEntity(Team newteam){
-		//It's not recognizing the ID from ITeam!
-		//Log.trace("ENTITY MANAGER", "Registered entity of type " + newteam.entityType() + " and ID " newteam.ID());
 		Log.trace("ENTITY MANAGER", "Registered entity of type " + newteam.entityType() + " and ID " );
 		getInstance().teamList.put(newteam.ID(), newteam);
-		
+		getInstance().listOfTeamIDs.add(newteam);
 	}
 
 	public static BaseGameEntity getEntityFromID(int receiverID) {
