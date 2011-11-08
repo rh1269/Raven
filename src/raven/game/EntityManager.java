@@ -15,7 +15,7 @@ public class EntityManager {
 	}
 	
 	private static int availableID = 0;
-	static int lastTeamAssigned = 0;
+	static volatile int lastTeamAssigned = 0;
 
 	
 	public static synchronized int getAvailableID() {
@@ -44,17 +44,46 @@ public class EntityManager {
 		if(lastTeamAssigned < listOfTeamIDs.size()-1){
 			int temporary = lastTeamAssigned;
 			lastTeamAssigned++;
-			return listOfTeamIDs.get(temporary);
+			return listOfTeamIDs.get(lastTeamAssigned);
 		}
 		else{
+			System.out.println("(From the else) Last Assigned: " + lastTeamAssigned);
 			int temporary = lastTeamAssigned;
 			lastTeamAssigned = 0;
-			return listOfTeamIDs.get(temporary);
+			return listOfTeamIDs.get(0);
 		}
 	}
 	
 	
-	private EntityManager() {}
+	/*
+	public static Team getAvailableTeam() {
+		if(lastTeamAssigned == -1){
+			///First bot to request a team
+			System.out.println("Negative one means first assignment");
+			System.out.println("Last Assigned: " + lastTeamAssigned);
+			lastTeamAssigned = 0;
+			return listOfTeamIDs.get(0);
+		}
+		else if(lastTeamAssigned >= listOfTeamIDs.size()){
+			System.out.println("Should be the last team in a list, so, we assign 0");
+			System.out.println("Last Assigned: " + lastTeamAssigned);
+			lastTeamAssigned = 0;
+			return listOfTeamIDs.get(0);
+		}
+		else
+			System.out.println("This is the else Last Assigned: " + lastTeamAssigned);
+			System.out.println("Not the first, looks like last time it was probably zero, so team 1");
+		lastTeamAssigned++;
+		System.out.println("Last Assigned plus 1" + lastTeamAssigned);
+		return listOfTeamIDs.get(lastTeamAssigned);		
+	}
+	*/
+	
+	
+	private EntityManager() {
+
+		
+	}
 	
 	public static void registerEntity(BaseGameEntity entity) {
 		Log.trace("ENTITY MANAGER", "Registered entity of type " + entity.entityType() + " and ID " + entity.ID()); 
