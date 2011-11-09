@@ -1,6 +1,5 @@
 package raven.game;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -251,7 +250,6 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		//First get an available team and join it
 		team = EntityManager.getAvailableTeam();
 		//Log.info("BotConstructor", "Bot team is" + this.getTeam());
-		
 		Log.info("BotConstructor", "Bot team is" + this.team.ID());
 		//We want entity manager to handle this later but for now just let team know you're joining
 		team.draftBot(this);
@@ -310,19 +308,19 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 			return;
 		}
 
-		if(getTeam() != null){ 
-			if(this.isCaptain)
-			{
-				GameCanvas.setColor(getTeam().getCaptainColor());
-			}
-			else
+		if(getTeam() != null){
 			GameCanvas.setColor(getTeam().getTeamColor());
-		} 
-		else {  ///Not part of a team
+		} else {
 			GameCanvas.bluePen();
 		}
 		
-
+<<<<<<< HEAD
+		GameCanvas.bluePen();
+=======
+		//GameCanvas.bluePen();
+		vecBotVBTrans = new ArrayList<Vector2D>(Transformations.WorldTransform(
+				vecBotVB, pos(), facing(), facing().perp(), scale()));
+>>>>>>> experimental
 		
 		if (this.getTargetSys().isTargetShootable()) {
 			vecBotVBTrans = new ArrayList<Vector2D>(Transformations.WorldTransform(
@@ -620,13 +618,9 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		brain = think;
 	}
 	
-	public void becomeCaptain()
+	public void setAsCaptain()
 	{
 		isCaptain = true;
-		//Once a bot becomes captain, its health should go up by a 
-		//large factor
-		this.maxHealth = (maxHealth*10);
-		this.health = (health * 10);
 	}
 
 	/**
@@ -786,21 +780,4 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 	public void setSteering(RavenSteering steering){
 		this.steering = steering; 
 	}
-
-	@Override
-
-	/**
-	 * Returns a string if it's a captain or a drone
-	 * 
-	 */
-	public String getRole() {
-		if(this.isCaptain)
-		{
-			return "Captain";
-		}
-		else return "Drone";
-
-	}
-
-
 }

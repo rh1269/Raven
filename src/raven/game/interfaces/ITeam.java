@@ -3,6 +3,8 @@
  */
 package raven.game.interfaces;
 
+import java.awt.Color;
+
 import raven.game.RavenObject;
 import raven.game.messaging.Telegram;
 import raven.goals.GoalThink;
@@ -16,11 +18,13 @@ public interface ITeam {
 
 
 	//public GoalThink getBrain();
+	public Color getTeamColor();
+	public Color getCaptainColor();
 	public boolean handleMessage(Telegram msg);
 	public void update(double delta);
 	public Vector2D getTeamSpawnPoint();
 	public void draftBot(IRavenBot draftee);
-	public void dropBot(IRavenBot draftee);
+	public void removeBotFromTeam(IRavenBot draftee);
 	public RavenObject entityType();
 	public int ID();
 }
