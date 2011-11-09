@@ -247,9 +247,6 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		sensoryMem = new RavenSensoryMemory(this,
 				RavenScript.getDouble("Bot_MemorySpan"));
 		
-		
-		//TODO Make this a function?
-		//Handle a lack of teams
 		//attempt to join a team
 		//First get an available team and join it
 		team = EntityManager.getAvailableTeam();

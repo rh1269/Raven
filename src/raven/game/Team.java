@@ -32,6 +32,8 @@ import java.util.ArrayList;
  * Scatter(Leader is dead)
  * Kill enemy leader
  * Murder defenders
+ * We need a brain/goal to "Stay close to captain"
+ * We need a message handler to deal with "Score increased"
  * 
  * Just different flavors of pursuit, or evade.
  * Also there needs to be a way to tell the leader to move more slowly

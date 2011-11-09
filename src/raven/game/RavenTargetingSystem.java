@@ -23,7 +23,9 @@ public class RavenTargetingSystem implements IRavenTargetingSystem{
 		
 		// grab a list of all the opponents the owner can sense
 		List<IRavenBot> sensedBots = owner.getSensoryMem().getListOfRecentlySensedOpponents();
+		///This really should be based on teamID, not a reference directly to "team"
 		List<IRavenBot> validTargets = removeTeammatesFromSensed(sensedBots, owner.getTeam().ID());
+		
 		
 		for (IRavenBot opponent : validTargets) {
 			if (opponent.isAlive() && !opponent.equals(owner)) {
