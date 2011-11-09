@@ -1,5 +1,6 @@
 package raven.game;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -246,6 +247,9 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		sensoryMem = new RavenSensoryMemory(this,
 				RavenScript.getDouble("Bot_MemorySpan"));
 		
+		
+		//TODO Make this a function?
+		//Handle a lack of teams
 		//attempt to join a team
 		//First get an available team and join it
 		team = EntityManager.getAvailableTeam();
@@ -309,13 +313,19 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 			return;
 		}
 
-		if(getTeam() != null){
+		if(getTeam() != null){ 
+			if(this.isCaptain)
+			{
+				GameCanvas.setColor(getTeam().getCaptainColor());
+			}
+			else
 			GameCanvas.setColor(getTeam().getTeamColor());
-		} else {
+		} 
+		else {  ///Not part of a team
 			GameCanvas.bluePen();
 		}
 		
-		//GameCanvas.bluePen();
+
 		
 		if (this.getTargetSys().isTargetShootable()) {
 			vecBotVBTrans = new ArrayList<Vector2D>(Transformations.WorldTransform(
@@ -613,9 +623,13 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		brain = think;
 	}
 	
-	public void setAsCaptain()
+	public void becomeCaptain()
 	{
 		isCaptain = true;
+		//Once a bot becomes captain, its health should go up by a 
+		//large factor
+		this.maxHealth = (maxHealth*10);
+		this.health = (health * 10);
 	}
 
 	/**
@@ -775,4 +789,21 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 	public void setSteering(RavenSteering steering){
 		this.steering = steering; 
 	}
+
+	@Override
+
+	/**
+	 * Returns a string if it's a captain or a drone
+	 * 
+	 */
+	public String getRole() {
+		if(this.isCaptain)
+		{
+			return "Captain";
+		}
+		else return "Drone";
+
+	}
+
+
 }

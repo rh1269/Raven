@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * make "loose bots"? Ask
  * add to iraven interface (?) In Progress
  *
- * 
+ * TODO 
  * Teams are based on a captain
  * protect captain
  * Find Captain
@@ -41,11 +41,12 @@ import java.util.ArrayList;
 
 public class Team extends BaseGameEntity implements ITeam
 {
-	//Private vars
-	private static int currValidTeamID = 0;
+	
 	private static int teamID;
 	private Color teamColor;
+	private Color captainColor;
 	private static int currValidColor = 0;
+	private IRavenBot teamCaptain = null;
 	
 	////A list of bots on the team, should be references, I'll ask
 	private	List<IRavenBot> teamBots = new ArrayList<IRavenBot>();
@@ -91,18 +92,25 @@ public class Team extends BaseGameEntity implements ITeam
 			//the last team color was zero (red) and if so, 
 			//the new one is blue.
 
-
+///TODO Support for additional team colors
 			 if (currValidColor == 0)
 			 {
 			 teamColor = new Color(250,0,0);
+			 //captainColor = (copyColor(teamColor)).brighter();
+			 captainColor = createCaptainColor(teamColor);
 			 currValidColor = 1;
 			 }
 			 else
+			 {
 				 teamColor = new Color(0,250,0);
+				 captainColor = createCaptainColor(teamColor);
+				 currValidColor = 0;
+			 }
+			 
 		}
 
-	
-	
+
+
 	//We want a way to add a bot to the list of bots on this team
 	//But, we're in the middle of gutting out the entity manager
 	//so we should probably just accept a reference to a bot.
@@ -110,15 +118,19 @@ public class Team extends BaseGameEntity implements ITeam
 	//to avoid confusion
 	public void draftBot(IRavenBot draftee) {
 	//Ask if this works as a reference
-		if (teamBots.size()==0){
-			draftee.setAsCaptain();
+		if (teamBots.isEmpty()){
+			
+			draftee.becomeCaptain();
 			Log.info("TEAM", "Registered Captain of team " + draftee.getTeam().ID());
+			this.teamCaptain = draftee;
 		}
+		
 		teamBots.add(draftee);
+		Log.info("Drafted");
 	}
 	
 	///We may want to add a clear/remove team association. 
-	public void dropBot(IRavenBot draftee){
+	public void removeBotFromTeam(IRavenBot draftee){
 		teamBots.remove(draftee);
 	}
 
@@ -132,14 +144,25 @@ public class Team extends BaseGameEntity implements ITeam
 	
 	@Override
 	public boolean handleMessage(Telegram msg) {
+		//TODO
 		// We need to implement the ability to handle a 
 		// broad or multicast.
 		// we could treat every message to the team as multicast
+		// "Captain_Dead"
+		// "Captain has spawned at Location"
+		// "Captain's current Location"
+		// "Captain being hit by:"
+		//	----This message accepts a hit notification from Captain
+		//	----It should let the Drones know to target said bot until dead
+		//	----It should ignore new hit by notifications until said target
+		//  ---- is dead, or 2 seconds
+		//
 		
 	return false;
 	}
 
-
+	//TODO If we implement a "Base" so that bots don't 
+	//spawn into a group of opponents every time
 	public Vector2D getTeamSpawnPoint(){
 		return teamSpawnPoints.get(0);
 	}
@@ -153,4 +176,33 @@ public class Team extends BaseGameEntity implements ITeam
 	public Color getTeamColor(){
 		return teamColor;
 	}
+	
+
+
+
+	public Color getCaptainColor() {
+		return captainColor;
+	}
+	
+	///Instead of implementing a copy constructor for a class we didn't create,
+	///building a helper function
+	private Color copyColor(Color source){
+		return (new Color(source.getRGB()));		
+	}
+	
+	/**
+	 * Creates a darker version of the existing team color
+	 * @param teamColor -> existing color of this team
+	 * @return new color (R.G.B values divided by 2)
+	 */
+	private Color createCaptainColor(Color teamColor) {
+//		return copyColor(teamColor).brighter();
+		return new Color((teamColor.getRed()/2),(teamColor.getGreen()/2),(teamColor.getBlue()/2));
+	}
+	
+	
+	
+	
 }
+
+
