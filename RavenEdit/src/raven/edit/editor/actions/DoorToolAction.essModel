@@ -1,0 +1,153 @@
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::IRavenBot]
+X=434
+Y=40
+
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::IRavenTargetingSystem]
+X=20
+Y=40
+Visible=0
+
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::ITeam]
+X=229
+Y=40
+
+[Diagram: ::raven.game.interfaces]
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowAssoc=0
+
+[Box: ::raven.game - ::raven.game.armory::RavenWeapon]
+X=1128
+Y=40
+Visible=0
+
+[Box: ::raven.game - ::raven.game.interfaces::IRavenBot]
+X=1071
+Y=1089
+
+[Box: ::raven.game - ::raven.game.interfaces::IRavenTargetingSystem]
+X=225
+Y=499
+Visible=0
+
+[Box: ::raven.game - ::raven.game.interfaces::ITeam]
+X=225
+Y=1089
+
+[Box: ::raven.game - ::raven.game.triggers::Trigger]
+X=652
+Y=1089
+
+[Box: ::raven.game - ::raven.game.triggers::TriggerSystem]
+X=430
+Y=40
+
+[Box: ::raven.game - ::raven.game::BaseGameEntity]
+X=741
+Y=40
+Visible=0
+
+[Box: ::raven.game - ::raven.game::EntityManager]
+X=539
+Y=434
+
+[Box: ::raven.game - ::raven.game::EntityManager.EntityManagerHolder]
+X=669
+Y=40
+
+[Box: ::raven.game - ::raven.game::GraveMarkers]
+X=20
+Y=1089
+Visible=0
+
+[Box: ::raven.game - ::raven.game::GraveMarkers.GraveRecord]
+X=225
+Y=40
+
+[Box: ::raven.game - ::raven.game::MovingEntity]
+X=543
+Y=499
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenBot]
+X=744
+Y=434
+
+[Box: ::raven.game - ::raven.game::RavenDoor]
+X=953
+Y=499
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenGame]
+X=225
+Y=906
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenMap]
+X=225
+Y=1495
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenSensoryMemory]
+X=903
+Y=40
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenSensoryMemory.MemoryRecord]
+X=545
+Y=1495
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenSteering]
+X=430
+Y=906
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenTargetingSystem]
+X=1366
+Y=40
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenUserOptions]
+X=946
+Y=40
+Visible=0
+
+[Box: ::raven.game - ::raven.game::RavenWeaponSystem]
+X=789
+Y=1495
+Visible=0
+
+[Box: ::raven.game - ::raven.game::Team]
+X=283
+Y=893
+
+[Box: ::raven.game - ::raven.goals::GoalThink]
+X=708
+Y=893
+
+[Box: ::raven.game - ::raven.math.graph::SparseGraph]
+X=433
+Y=1089
+
+[Box: ::raven.game - ::raven.math::CellSpacePartition]
+X=857
+Y=1089
+
+[Box: ::raven.game - ::raven.math::Vector2D]
+X=71
+Y=434
+Visible=0
+
+[Box: ::raven.game - ::raven.math::Wall2D]
+X=20
+Y=40
+Visible=0
+
+[Diagram: ::raven.game]
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowAssoc=1
+
