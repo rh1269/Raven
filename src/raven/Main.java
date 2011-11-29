@@ -16,7 +16,8 @@ public class Main {
 	private static RavenGame game;
 	
     public static void main(String args[]) {
-    	Log.setLevel(Level.INFO);
+    	//Log.setLevel(Level.INFO);
+    	Log.setLevel(Level.DEBUG);
     	
     	game = new RavenGame();
     	ui = new RavenUI(game);

@@ -1,4 +1,4 @@
-package raven.goals;
+package raven.game;
 
 public class TaskMaster {
 
