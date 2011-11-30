@@ -12,6 +12,7 @@ import java.util.List;
 import raven.math.*;
 import raven.ui.GameCanvas;
 import raven.utils.Log;
+import raven.game.TaskMaster;
 
 import java.util.ArrayList;
 
@@ -120,16 +121,30 @@ public class Team extends BaseGameEntity implements ITeam
 	//to avoid confusion
 	public void draftBot(IRavenBot draftee) {
 	//Ask if this works as a reference
+		/*
 		if (teamBots.isEmpty()){
 			
 			draftee.becomeCaptain();
 			Log.info("TEAM", "Registered Captain of team " + draftee.getTeam().ID());
 			this.teamCaptain = draftee;
 		}
-		
+		*/
 		teamBots.add(draftee);
 		Log.info("Drafted");
 	}
+	
+	
+	
+	
+	public boolean teamHasCaptain(){
+		return (this.teamCaptain != null);
+			
+	}
+	
+	
+	
+	
+	
 	
 	///We may want to add a clear/remove team association. 
 	public void removeBotFromTeam(IRavenBot draftee){
@@ -169,6 +184,16 @@ public class Team extends BaseGameEntity implements ITeam
 		return teamSpawnPoints.get(0);
 	}
 	
+	
+	
+	/*
+	public RavenBot getCaptain()
+	{
+		return null;
+		
+	}
+	*/
+	
 	////We need new goals/brains
 	/*
 	public GoalThink getBrain() {
@@ -203,7 +228,11 @@ public class Team extends BaseGameEntity implements ITeam
 	}
 	
 	
-	
+	public RavenTask getNewTask(){
+		
+		TaskMaster.getMaster();
+		return RavenTask.TASK_NONE;
+	}
 	
 }
 
