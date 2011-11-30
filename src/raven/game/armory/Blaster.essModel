@@ -1,0 +1,19 @@
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::IRavenBot]
+X=589
+Y=218
+
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::IRavenTargetingSystem]
+X=20
+Y=40
+Visible=0
+
+[Box: ::raven.game.interfaces - ::raven.game.interfaces::ITeam]
+X=591
+Y=351
+
+[Diagram: ::raven.game.interfaces]
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowAssoc=1
+
