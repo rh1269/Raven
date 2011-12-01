@@ -256,7 +256,9 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		Log.info("BotConstructor", "Bot team is" + this.team.ID());
 		//We want entity manager to handle this later but for now just let team know you're joining
 		team.draftBot(this);
-		this.team.getNewTask();
+		///This is now the assumption that TaskMaster is a now a singleton
+		//TaskMaster.getMaster().getNewTask(this);
+		getTeam().getNewTask(this);
 	}
 
 	/**

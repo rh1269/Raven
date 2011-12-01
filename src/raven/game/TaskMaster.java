@@ -48,8 +48,8 @@ public class TaskMaster {
 	 * re-writing the same code. 
 	 * @return
 	 */
-	public RavenTask getNewTask(){
-		return getNewTask(RavenTask.TASK_NONE);
+	public RavenTask getNewTask(RavenBot bot){
+		return getNewTask(RavenTask.TASK_NONE, bot);
 	}
 	
 	/**
@@ -57,15 +57,19 @@ public class TaskMaster {
 	 * @param cur_task
 	 * @return a string of the new tasks
 	 */
-	public RavenTask getNewTask(RavenTask cur_task){
+	public RavenTask getNewTask(RavenTask cur_task, RavenBot bot){
 		
+		if (bot.getTeam().teamHasCaptain()){
+			return RavenTask.TASK_BODYGUARD;
+		}
+		else {
+			
+			return RavenTask.TASK_CAPTAIN;
+		}
 		
-		
-		return RavenTask.TASK_CAPTAIN;
-		
-		
-		//return cur_task;
-		
+			//TODO
+			//We need task arbitraion here. This is the magic.
+
 	}
 
 	///TODO Is there a captain? Make a captain!
@@ -79,6 +83,8 @@ public class TaskMaster {
 	
 	}
 	
-	
+	public void doYouExist(){
+		System.out.println("YES THE TASKMASTER EXISTS");
+	}
 	
 }

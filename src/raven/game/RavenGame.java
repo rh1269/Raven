@@ -96,7 +96,6 @@ public class RavenGame {
 			
 			if (available) {
 				bot.spawn(pos);
-				
 				return true;
 			}
 		}
@@ -333,6 +332,7 @@ public class RavenGame {
 		map = MapSerializer.deserializeMapFromPath(fileName);
 		
 		EntityManager.reset();
+		TaskMaster.getMaster().doYouExist();
 		
 		//Testing the creation of teams at startup
 		addTeams(RavenScript.getInt("NumTeams"));

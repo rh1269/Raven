@@ -51,6 +51,7 @@ public class Team extends BaseGameEntity implements ITeam
 	private static int currValidColor = 0;
 	private IRavenBot teamCaptain = null;
 	
+	
 	////A list of bots on the team, should be references, I'll ask
 	private	List<IRavenBot> teamBots = new ArrayList<IRavenBot>();
 	
@@ -228,10 +229,21 @@ public class Team extends BaseGameEntity implements ITeam
 	}
 	
 	
-	public RavenTask getNewTask(){
+	public RavenTask getNewTask(RavenBot bot){
+		RavenTask task;
+		task = TaskMaster.getMaster().getNewTask(bot);
+		if (task == RavenTask.TASK_CAPTAIN){
+			////Well TaskMaster says this guy is now captain.
+			bot.becomeCaptain();
+			teamCaptain = bot;
+			Log.info("TEAM", "Registered Captain of team " + bot.getTeam().ID());
+			return task;
+		}
+		else{
+			Log.info("TASK", "Task Assigned to bot " + bot.ID());
+			return task;	
+		}
 		
-		TaskMaster.getMaster();
-		return RavenTask.TASK_NONE;
 	}
 	
 }
