@@ -30,6 +30,7 @@ import raven.ui.RavenUI;
 import raven.utils.Log;
 import raven.utils.MapSerializer;
 import raven.utils.MapLoadedException;
+import raven.game.TaskMaster;
 
 public class RavenGame {
 	/** the current game map */
@@ -95,7 +96,6 @@ public class RavenGame {
 			
 			if (available) {
 				bot.spawn(pos);
-				
 				return true;
 			}
 		}
@@ -332,6 +332,7 @@ public class RavenGame {
 		map = MapSerializer.deserializeMapFromPath(fileName);
 		
 		EntityManager.reset();
+		TaskMaster.getMaster().doYouExist();
 		
 		//Testing the creation of teams at startup
 		addTeams(RavenScript.getInt("NumTeams"));

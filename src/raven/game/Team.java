@@ -12,6 +12,7 @@ import java.util.List;
 import raven.math.*;
 import raven.ui.GameCanvas;
 import raven.utils.Log;
+import raven.game.TaskMaster;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,7 @@ public class Team extends BaseGameEntity implements ITeam
 	private Color captainColor;
 	private static int currValidColor = 0;
 	private IRavenBot teamCaptain = null;
+	
 	
 	////A list of bots on the team, should be references, I'll ask
 	private	List<IRavenBot> teamBots = new ArrayList<IRavenBot>();
@@ -120,16 +122,30 @@ public class Team extends BaseGameEntity implements ITeam
 	//to avoid confusion
 	public void draftBot(IRavenBot draftee) {
 	//Ask if this works as a reference
+		/*
 		if (teamBots.isEmpty()){
 			
 			draftee.becomeCaptain();
 			Log.info("TEAM", "Registered Captain of team " + draftee.getTeam().ID());
 			this.teamCaptain = draftee;
 		}
-		
+		*/
 		teamBots.add(draftee);
 		Log.info("Drafted");
 	}
+	
+	
+	
+	
+	public boolean teamHasCaptain(){
+		return (this.teamCaptain != null);
+			
+	}
+	
+	
+	
+	
+	
 	
 	///We may want to add a clear/remove team association. 
 	public void removeBotFromTeam(IRavenBot draftee){
@@ -169,6 +185,16 @@ public class Team extends BaseGameEntity implements ITeam
 		return teamSpawnPoints.get(0);
 	}
 	
+	
+	
+	/*
+	public RavenBot getCaptain()
+	{
+		return null;
+		
+	}
+	*/
+	
 	////We need new goals/brains
 	/*
 	public GoalThink getBrain() {
@@ -203,7 +229,22 @@ public class Team extends BaseGameEntity implements ITeam
 	}
 	
 	
-	
+	public RavenTask getNewTask(RavenBot bot){
+		RavenTask task;
+		task = TaskMaster.getMaster().getNewTask(bot);
+		if (task == RavenTask.TASK_CAPTAIN){
+			////Well TaskMaster says this guy is now captain.
+			bot.becomeCaptain();
+			teamCaptain = bot;
+			Log.info("TEAM", "Registered Captain of team " + bot.getTeam().ID());
+			return task;
+		}
+		else{
+			Log.info("TASK", "Task Assigned to bot " + bot.ID());
+			return task;	
+		}
+		
+	}
 	
 }
 

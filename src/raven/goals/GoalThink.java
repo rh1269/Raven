@@ -28,9 +28,12 @@ public class GoalThink extends GoalComposite<RavenBot> {
 		ExploreBias = Math.random() + 0.5;
 		AttackBias  = Math.random() + 0.5;
 
+		
+
 		m_Evaluators.add(new GetHealthGoal_Evaluator(HealthBias));
 		m_Evaluators.add(new ExploreGoal_Evaluator(ExploreBias));
 		m_Evaluators.add(new AttackTargetGoal_Evaluator(AttackBias));
+		
 
 		try {
 			m_Evaluators.add(new GetWeaponGoal_Evaluator(ShotgunBias,

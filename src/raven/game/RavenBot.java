@@ -26,6 +26,7 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 	
 	private Team team;
 	private boolean isCaptain;
+	private RavenTask curTask;
 	
 	/** alive, dead or spawning? */
 	private Status status;
@@ -250,12 +251,14 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		//attempt to join a team
 		//First get an available team and join it
 		team = EntityManager.getAvailableTeam();
-		//Log.info("BotConstructor", "Bot team is" + this.getTeam());
+
 		
 		Log.info("BotConstructor", "Bot team is" + this.team.ID());
 		//We want entity manager to handle this later but for now just let team know you're joining
 		team.draftBot(this);
-
+		///This is now the assumption that TaskMaster is a now a singleton
+		//TaskMaster.getMaster().getNewTask(this);
+		getTeam().getNewTask(this);
 	}
 
 	/**
@@ -556,6 +559,9 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		health -= amount;
 		
 		if (health <= 0) {
+			///Add a function here for captain killed?
+			///Or put it in the Team object?
+			//TODO deal with dead captains
 			setDead();
 		}
 		
