@@ -559,6 +559,9 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 		health -= amount;
 		
 		if (health <= 0) {
+			///Add a function here for captain killed?
+			///Or put it in the Team object?
+			//TODO deal with dead captains
 			setDead();
 		}
 		
