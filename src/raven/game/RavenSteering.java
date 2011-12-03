@@ -44,7 +44,15 @@ public class RavenSteering {
 		WANDER(8),
 		SEPARATION(16),
 		WALL_AVOIDANCE(32),
-		PURSUIT(64);
+		PURSUIT(64),
+		//added behaviors
+		FLEE(128),
+		EVADE(45);
+		
+		
+		
+		
+		
 
 		private int value;
 		private BehaviorType(int i) {value = i;}
@@ -91,6 +99,9 @@ public class RavenSteering {
 	private double        weightWallAvoidance;
 	private double        weightSeek;
 	private double        weightArrive;
+	
+	public double 		  weightFlee;
+	public double		  weightEvade;
 
 
 	/** how far the agent can 'see' */
@@ -344,7 +355,88 @@ public class RavenSteering {
 		Transformations.Vec2DRotateAroundOrigin(temp, Math.PI / 6);
 		feelers.add(ravenBot.pos().add(temp.mul(wallDetectionFeelerLength/2).mul(ravenBot.speed()))); 
 	}
-
+	
+	
+	//Translation/modification OF C++ behaviors
+	//beginning of added behaviors
+	//---------------------------------------------------------------------------------------------------
+	Vector2D flee( Vector2D Target)
+	{
+		Vector2D desiredVelocity=ravenBot.pos().sub(Target);
+		desiredVelocity.normalize();
+		desiredVelocity=desiredVelocity.mul(ravenBot.maxForce());
+		
+		return(desiredVelocity.sub(ravenBot.velocity()));
+		
+	}
+	
+	
+	
+	
+	private Vector2D evade(RavenBot pursuer)
+	{
+		//not done!!
+		//Vector2D ToPurser = pursuer.pos() - mpcurrent.pos();
+		
+		Vector2D ToPursuer = pursuer.pos().sub(ravenBot.pos());
+		
+		
+		double LookAheadTime = ToPursuer.length()/(ravenBot.maxSpeed()+pursuer.speed());
+		
+		return flee(pursuer.pos().add(pursuer.velocity().mul(LookAheadTime)));
+		
+	}
+	
+	private Vector2D GetHidingPosition(Vector2D posOb, double radiusOb, Vector2D posTarget)
+	{
+		double DistanceFromBoundary = 30.0;
+		double DistAway = radiusOb + DistanceFromBoundary;
+		
+		Vector2D toOb = posOb.sub(posTarget);
+	    
+		toOb.normalize();
+		
+		return((toOb.mul(DistAway)).add(posOb));
+	}
+	
+	/*
+	private Vector2D Hide()
+	{
+		double DistToClosest=MaxDouble SVector2D BestHidingSpot;
+		
+		//declare variable to iterate through list of objects called curOb
+		
+		while(CurOb!=obstacles.end())
+		{
+			//calculate the position of the hiding spot for this obstacle
+		SVector2D HidingSpot= GetHidingPosition(NECESSARY VARIABLES);
+			
+			double dist = Vec2DDistanceSq(HidingSpot, mpVehicle.pos());
+			
+			if (dist<DistToClosest)
+			{
+				DistToClosest=dist;
+				BestHidingSpot=HidingSpot;
+			}
+			
+			++curOb;
+		}
+		
+		
+		if(DistToClosest==MaxDouble)
+		{
+		return evade(target);	
+		}
+		
+		return Arrive(BestHidingSpot, fast);
+	}
+	*/
+	
+	
+	
+	
+	//----------------------------------------------------------------
+	
 
 	private Vector2D separation(final List<IRavenBot> agents){
 
@@ -428,6 +520,23 @@ public class RavenSteering {
 			if (!accumulateForce(steeringForce, force)) return steeringForce;
 		}
 
+		
+		if (On(BehaviorType.FLEE))
+		{
+			force = flee(target).mul(weightFlee);
+
+			if (!accumulateForce(steeringForce, force)) return steeringForce;
+		}
+
+		if (On(BehaviorType.EVADE))
+		{
+			force = evade(targetAgent1).mul(weightEvade);
+			if (!accumulateForce(steeringForce, force)) return steeringForce;
+		}
+
+		
+		
+		
 		return steeringForce;
 	}
 
@@ -444,6 +553,13 @@ public class RavenSteering {
 		viewDistance				= RavenScript.getDouble("ViewDistance");
 		wallDetectionFeelerLength	= RavenScript.getDouble("WallDetectionFeelerLength");
 		weightPursuit				= RavenScript.getDouble("PursuitWeight");
+		
+		//added
+		
+		weightFlee				= RavenScript.getDouble("FleeWeight");
+		weightEvade				= RavenScript.getDouble("EvadeWeight");
+		
+		
 		steeringForce				= new Vector2D();
 		feelers						= new Vector<Vector2D>(3);
 		deceleration				= Deceleration.NORMAL;
@@ -499,12 +615,17 @@ public class RavenSteering {
 
 	public void setSummingMethod(SummingMethod sm) { summingMethod = sm; }
 
+	
 	public void seekOn() { flags |= BehaviorType.SEEK.getValue(); }
 	public void arriveOn() { flags |= BehaviorType.ARRIVE.getValue(); }
 	public void wanderOn() { flags |= BehaviorType.WANDER.getValue(); }
 	public void pursuitOn() { flags |= BehaviorType.PURSUIT.getValue(); }
 	public void separationOn() { flags |= BehaviorType.SEPARATION.getValue(); }
 	public void wallAvoidanceOn() { flags |= BehaviorType.WALL_AVOIDANCE.getValue(); }
+	//added
+	public void fleeOn(){flags|=BehaviorType.FLEE.getValue();}
+	public void evadeOn(){flags|=BehaviorType.EVADE.getValue();}
+	
 
 	public void seekOff() { if(On(BehaviorType.SEEK)) flags ^= BehaviorType.SEEK.getValue(); }
 	public void arriveOff() { if(On(BehaviorType.ARRIVE)) flags ^= BehaviorType.ARRIVE.getValue(); }
@@ -512,13 +633,25 @@ public class RavenSteering {
 	public void pursuitOff() { if(On(BehaviorType.PURSUIT)) flags ^= BehaviorType.PURSUIT.getValue(); }
 	public void separationOff() { if(On(BehaviorType.SEPARATION)) flags ^= BehaviorType.SEPARATION.getValue(); }
 	public void wallAvoidanceOff() { if(On(BehaviorType.WALL_AVOIDANCE)) flags ^= BehaviorType.WALL_AVOIDANCE.getValue(); }
+	//added
+	public void fleeOff() { if(On(BehaviorType.FLEE)) flags ^= BehaviorType.FLEE.getValue(); }
+	public void evadeOff() { if(On(BehaviorType.EVADE)) flags ^= BehaviorType.EVADE.getValue(); }
+	
+	
+	
+	
+	
 	public boolean seekIsOn() { return On(BehaviorType.SEEK); }
 	public boolean arriveIsOn() { return On(BehaviorType.ARRIVE); }
 	public boolean wanderIsOn() { return On(BehaviorType.WANDER); }
 	public boolean pursuitIsOn() { return On(BehaviorType.PURSUIT); }
 	public boolean separationIsOn() { return On(BehaviorType.SEPARATION); }
 	public boolean wallAvoidanceIsOn() { return On(BehaviorType.WALL_AVOIDANCE); }
-
+    //added
+	public boolean fleeIsOn() { return On(BehaviorType.FLEE); }
+	public boolean evadeIsOn() { return On(BehaviorType.EVADE); }
+	
+	
 	public final Vector<Vector2D> getFeelers() { return feelers; }
 
 	public final double wanderJitter() { return wanderJitter; }

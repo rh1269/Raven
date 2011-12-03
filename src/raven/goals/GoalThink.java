@@ -15,6 +15,9 @@ public class GoalThink extends GoalComposite<RavenBot> {
 	private double RailgunBias = 0.0;
 	private double ExploreBias = 0;
 	private double AttackBias  = 0;
+	
+	//added
+	private double EvadeBias=0;
 
 	public GoalThink(RavenBot ravenBot) {
 		super(ravenBot, Goal.GoalType.goal_think);
@@ -27,14 +30,20 @@ public class GoalThink extends GoalComposite<RavenBot> {
 		RailgunBias = Math.random() + 0.5;
 		ExploreBias = Math.random() + 0.5;
 		AttackBias  = Math.random() + 0.5;
-
+		//maybe wrong
+		EvadeBias = Math.random()+.5;
+		
+		
 		
 
 		m_Evaluators.add(new GetHealthGoal_Evaluator(HealthBias));
 		m_Evaluators.add(new ExploreGoal_Evaluator(ExploreBias));
 		m_Evaluators.add(new AttackTargetGoal_Evaluator(AttackBias));
+		//maybe wrong
+		m_Evaluators.add(new EvadeTargetGoal_Evaluator(EvadeBias));
 		
-
+		
+	
 		try {
 			m_Evaluators.add(new GetWeaponGoal_Evaluator(ShotgunBias,
 					RavenObject.SHOTGUN));
@@ -140,6 +149,16 @@ public class GoalThink extends GoalComposite<RavenBot> {
 			removeAllSubgoals();
 			AddSubgoal( new Goal_Pursuit(m_pOwner, target));
 			Log.debug("GoalThink", "Added new Goal_Pursuit to bot " + m_pOwner.ID());
+		}
+	}
+	
+	//added evade
+	
+	public void addGoal_evade(RavenBot target) {
+		if (notPresent(GoalType.goal_evade)) {
+			removeAllSubgoals();
+			AddSubgoal( new Goal_Evade(m_pOwner, target));
+			Log.debug("GoalThink", "Added new Goal_Evade to bot " + m_pOwner.ID());
 		}
 	}
 	public void addGoal_getItem(RavenObject inp) {

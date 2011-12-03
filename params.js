@@ -118,6 +118,9 @@ var SeekWeight                  = 0.5;
 var ArriveWeight                = 1.0;
 var PursuitWeight				= 5.0;
 
+var FleeWeight			= 1.0;
+var EvadeWeight			=3.0;
+
 //how close a neighbour must be before an agent considers it
 //to be within its neighborhood (for separation)
 var ViewDistance                =  15.0;
