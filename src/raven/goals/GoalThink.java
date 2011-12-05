@@ -157,6 +157,7 @@ public class GoalThink extends GoalComposite<RavenBot> {
 	public void addGoal_evade(RavenBot target) {
 		if (notPresent(GoalType.goal_evade)) {
 			removeAllSubgoals();
+			
 			AddSubgoal( new Goal_Evade(m_pOwner, target));
 			Log.debug("GoalThink", "Added new Goal_Evade to bot " + m_pOwner.ID());
 		}

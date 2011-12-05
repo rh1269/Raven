@@ -51,6 +51,10 @@ public class Team extends BaseGameEntity implements ITeam
 	private static int currValidColor = 0;
 	private IRavenBot teamCaptain = null;
 	
+	//added for score
+	private String teamColorString;
+	
+	
 	
 	////A list of bots on the team, should be references, I'll ask
 	private	List<IRavenBot> teamBots = new ArrayList<IRavenBot>();
@@ -100,6 +104,7 @@ public class Team extends BaseGameEntity implements ITeam
 			 if (currValidColor == 0)
 			 {
 			 teamColor = new Color(250,0,0);
+			 teamColorString="red";
 			 //captainColor = (copyColor(teamColor)).brighter();
 			 captainColor = createCaptainColor(teamColor);
 			 currValidColor = 1;
@@ -107,6 +112,7 @@ public class Team extends BaseGameEntity implements ITeam
 			 else
 			 {
 				 teamColor = new Color(0,250,0);
+				 teamColorString="green";
 				 captainColor = createCaptainColor(teamColor);
 				 currValidColor = 0;
 			 }
@@ -203,6 +209,11 @@ public class Team extends BaseGameEntity implements ITeam
 	*/
 	public Color getTeamColor(){
 		return teamColor;
+	}
+	
+	public String getTeamColorString()
+	{
+		return teamColorString;
 	}
 	
 

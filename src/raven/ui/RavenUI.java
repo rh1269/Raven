@@ -1,6 +1,8 @@
 package raven.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -21,13 +23,17 @@ import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
+
+
 
 import raven.game.RavenGame;
 import raven.game.RavenObject;
@@ -44,6 +50,13 @@ public class RavenUI extends JFrame implements KeyListener, MouseListener, Compo
 	private int width = 700;
 	private int height = 700;
 	private int framerate = 60;
+	
+	//team addition
+	static int rScore=0;
+	static int gScore=0;
+	static JTextField redField=new JTextField();
+	static JTextField greenField=new JTextField();	
+	
 
 	private RavenGame game;
 	private KeyState keys;
@@ -63,8 +76,10 @@ public class RavenUI extends JFrame implements KeyListener, MouseListener, Compo
     	
 		// Get the frame's content and use it for the game
     	JPanel panel = (JPanel)this.getContentPane();
-    	panel.setPreferredSize(new Dimension(width, height));
-    	panel.setLayout(null);
+    	panel.setPreferredSize(new Dimension(width, (int)(height*1.2)));//was just height
+    	panel.setLayout(new BorderLayout());
+    	//was null
+    	
 
     	// Setup our canvas and add it
     	GameCanvas.getInstance().addKeyListener(this);
@@ -91,10 +106,35 @@ public class RavenUI extends JFrame implements KeyListener, MouseListener, Compo
     	// Set up the menus
     	createMenu();
 
+    	
+    	
+//TEAMSCORE
+    	
+    	
+JPanel teamtextPanel=new JPanel();
+	
+
+
+		teamtextPanel.setLayout(new GridLayout(2,2));
+		
+		teamtextPanel.add(new JLabel("red score:"),null);
+		teamtextPanel.add(redField,null);
+		redField.setText(Integer.toString(rScore));
+		
+		teamtextPanel.add(new JLabel("green score:"),null);
+		teamtextPanel.add(greenField,null);
+		greenField.setText(Integer.toString(gScore));
+		
+		this.getContentPane().add(teamtextPanel,BorderLayout.SOUTH);
+
+
+
+		
+		
     	// All done. Show it!
     	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	this.pack();
-    	this.setResizable(false);
+    	this.setResizable(true);
     	this.setTitle("Raven - " + game.getMap().getName());
     	this.setVisible(true);
 	}
@@ -375,4 +415,43 @@ public class RavenUI extends JFrame implements KeyListener, MouseListener, Compo
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+//made additional class to update score	
+	
+
+	
+	public static void scoreUpdate(ScoreEvent event)
+	{
+		//needs further implementation
+		
+		
+		
+		if((event.getTeam()).equals("red"))
+		{
+		    rScore++;
+			redField.setText(Integer.toString(rScore));
+			
+		}
+		if((event.getTeam()).equals("green"))
+		{
+		    gScore++;
+			greenField.setText(Integer.toString(gScore));
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

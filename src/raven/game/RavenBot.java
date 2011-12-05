@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import raven.game.interfaces.IRavenBot;
 import raven.game.interfaces.IRavenTargetingSystem;
 import raven.game.messaging.Dispatcher;
@@ -16,8 +18,10 @@ import raven.math.Transformations;
 import raven.math.Vector2D;
 import raven.script.RavenScript;
 import raven.ui.GameCanvas;
+import raven.ui.ScoreEvent;
 import raven.utils.Log;
 import raven.utils.Regulator;
+import raven.ui.RavenUI;
 
 public class RavenBot extends MovingEntity implements IRavenBot {
 	private enum Status {
@@ -467,6 +471,12 @@ public class RavenBot extends MovingEntity implements IRavenBot {
 			
 		case MSG_YOU_GOT_ME_YOU_SOB:
 			incrementScore();
+	//here we go		
+			
+		
+			
+			ScoreEvent me=new ScoreEvent(this,1,team.getTeamColorString());
+				RavenUI.scoreUpdate(me);
 			
 			targSys.clearTarget();
 			

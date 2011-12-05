@@ -26,6 +26,7 @@ private RavenBot target;
 	public void activate() {
 		m_iStatus = Goal.CurrentStatus.active;
 		m_pOwner.getSteering().evadeOn();
+		m_pOwner.getSteering().fleeOn();
 		m_pOwner.getSteering().seekOff();
 		//m_pOwner.getSteering().arriveOff();
 		m_pOwner.getSteering().separationOff();
@@ -71,10 +72,11 @@ private RavenBot target;
 			
 			//AddSubgoal(new Goal_Evade(m_pOwner,m_pOwner.getTargetBot()));
 			m_pOwner.getSteering().setTarget(target.pos());
-			m_pOwner.getSteering().evadeOn();
+			//m_pOwner.getSteering().fleeOn();
+			//m_pOwner.getSteering().evadeOn();
 			
 		}
-		if ( toTarget.length()>7)
+		if ( toTarget.length()>8)
 		{
 			m_iStatus = Goal.CurrentStatus.completed;
 			return;
@@ -106,6 +108,7 @@ private RavenBot target;
 	@Override
 	public void terminate() {
 		m_pOwner.getSteering().evadeOff();
+		m_pOwner.getSteering().fleeOff();
 		m_iStatus = Goal.CurrentStatus.completed;
 	}
 	
